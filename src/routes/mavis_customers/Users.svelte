@@ -1,0 +1,87 @@
+<script context="module">    
+    import { createClient } from '@supabase/supabase-js';  
+    
+    const SUPABASE_URL = 'https://vhjdmjrluctpaljlzggc.supabase.co';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZoamRtanJsdWN0cGFsamx6Z2djIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTcwODQ3MTExNCwiZXhwIjoyMDI0MDQ3MTE0fQ.qNv63B0HVFo3ah516mUwqzJzxOjzgksyb3gjOEEFALg';    
+    const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+  </script>
+  
+  <script lang="ts">    
+    import { onMount } from 'svelte';  
+   
+    type User = {
+      cust_id: Number;
+      first_name: String;
+      last_name: String;
+      company: String;
+      street_no: String;
+      street_name: String;
+      suburb: String;
+      state: String;
+      post_code: Number;
+      phone: Number;
+      license_no: String;
+
+
+    };      
+    export let users: User[] = [];
+  
+    onMount(async () => {
+      try {       
+        const { data, error } = await supabase
+          .from('m_customer') 
+          .select('cust_id, first_name, last_name, company, street_no, street_name, suburb, state, post_code, phone, license_no');         
+        
+        if (error) {
+          throw new Error(`Error fetching data: ${error.message}`);
+        }        
+        users = data ?? [];   
+      } 
+        catch (error) {        
+        console.error(error);
+      }      
+    });
+  </script>
+  
+  <h1>All Users</h1>   
+ 
+  {#if users.length > 0}
+    <table>
+      <thead>        
+        <tr>
+          <th>Customer I.D.</th>
+          <th>First Name</th>
+          <th>Last Name</th>
+          <th>Company</th>
+          <th>Street No.</th>
+          <th>Street Name</th>
+          <th>Suburb</th>
+          <th>State</th>
+          <th>Postcode</th>
+          <th>Phone No.</th>
+          <th>License No.</th>
+        </tr>
+      </thead>
+      <tbody>
+        
+        {#each users as user}
+          <tr>
+            <td>{user.cust_id}</td>
+            <td>{user.first_name}</td>
+            <td>{user.last_name}</td>
+            <td>{user.company}</td>
+            <td>{user.street_no}</td>
+            <td>{user.street_name}</td>
+            <td>{user.suburb}</td>
+            <td>{user.state}</td>
+            <td>{user.post_code}</td>
+            <td>{user.phone}</td>
+            <td>{user.license_no}</td>
+          </tr>
+        {/each}
+      </tbody>
+    </table>
+  {:else}
+    <p>Fetching data...</p>
+  {/if}
+  
