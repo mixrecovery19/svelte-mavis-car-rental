@@ -1,9 +1,9 @@
 <script lang="ts">
-  import AllUsers from '../mavis_customers/Users.svelte';
+  import Customer from './m_customer.svelte';
 </script>
 
 <h1>Mavis Car Rental</h1>
 
-<AllUsers />
+<Customer />
 
 

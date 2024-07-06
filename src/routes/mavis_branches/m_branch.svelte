@@ -23,6 +23,64 @@
     };  
     
     export let m_branch: Branch[] = [];
+    async function addNewBranch(m_branch: { branch_code: String; manager: String; branch_address: String; suburb: String; state: String; post_code: Number; phone: String; fax: String; branch_name: String; }[]) {
+        const newBranch: Branch = {
+            branch_code: '', // Assign a default or unique code for the new branch
+            manager: '',
+            branch_address: '',
+            suburb: '',
+            state: '',
+            post_code: 0,
+            phone: '',
+            fax: '',
+            branch_name: ''
+        };
+
+        try {
+            const { data, error } = await supabase
+                .from('m_branch')
+                .insert([newBranch]);
+
+            if (error) {
+                throw new Error(`Error inserting new branch: ${error.message}`);
+            }
+
+            // Add the new branch to the m_branch array
+            m_branch = [...m_branch, ...(data ?? [])];
+
+            alert('New branch added successfully!');
+        } catch (error) {
+            console.error(error);
+            alert('An error occurred while adding the new branch.');
+        }
+    }
+
+
+    async function updateBranch(branch: Branch) {
+        try {
+            const { error } = await supabase
+                .from('m_branch')
+                .update({
+                    manager: branch.manager,
+                    branch_address: branch.branch_address,
+                    suburb: branch.suburb,
+                    state: branch.state,
+                    post_code: branch.post_code,
+                    phone: branch.phone,
+                    fax: branch.fax,
+                    branch_name: branch.branch_name
+                })
+                .eq('branch_code', branch.branch_code);
+
+            if (error) {
+                throw new Error(`Error updating data: ${error.message}`);
+            }
+
+            alert('Data updated successfully!');
+        } catch (error) {
+            console.error(error);
+        }
+    }
   
     onMount(async () => {
       try {        
@@ -34,7 +92,7 @@
           throw new Error(`Error fetching data: ${error.message}`);
         }  
         
-        m_branch = data ?? [];         
+        m_branch = data ?? [];      
       
       } catch (error) {       
         console.error(error);
@@ -43,7 +101,7 @@
   </script>
   
   <h1>Branches</h1>  
-
+  <button on:click={() => addNewBranch(m_branch)}>New Branch</button>
   {#if m_branch.length > 0}
     <table>
       <thead>        
@@ -57,6 +115,7 @@
           <th>Phone</th>
           <th>Fax</th>
           <th>Branch Name</th>
+          <th>Actions</th>
         </tr>
       </thead>
       <tbody>
@@ -64,14 +123,15 @@
         {#each m_branch as branch}
           <tr>
             <td>{branch.branch_code}</td>
-            <td>{branch.manager}</td>
-            <td>{branch.branch_address}</td>
-            <td>{branch.suburb}</td>
-            <td>{branch.state}</td>
-            <td>{branch.post_code}</td>
-            <td>{branch.phone}</td>
-            <td>{branch.fax}</td>
-            <td>{branch.branch_name}</td>
+                    <td><input type="text" bind:value={branch.manager} /></td>
+                    <td><input type="text" bind:value={branch.branch_address} /></td>
+                    <td><input type="text" bind:value={branch.suburb} /></td>
+                    <td><input type="text" bind:value={branch.state} /></td>
+                    <td><input type="number" bind:value={branch.post_code} /></td>
+                    <td><input type="text" bind:value={branch.phone} /></td>
+                    <td><input type="text" bind:value={branch.fax} /></td>
+                    <td><input type="text" bind:value={branch.branch_name} /></td>
+                    <td><button on:click={() => updateBranch(branch)}>Update</button></td>
           </tr>         
         {/each}
       </tbody>

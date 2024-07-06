@@ -9,7 +9,7 @@
   <script lang="ts">    
     import { onMount } from 'svelte';  
    
-    type User = {
+    type Customer = {
       cust_id: Number;
       first_name: String;
       last_name: String;
@@ -24,7 +24,7 @@
 
 
     };      
-    export let users: User[] = [];
+    export let m_customer: Customer[] = [];
   
     onMount(async () => {
       try {       
@@ -35,7 +35,7 @@
         if (error) {
           throw new Error(`Error fetching data: ${error.message}`);
         }        
-        users = data ?? [];   
+        m_customer = data ?? [];   
       } 
         catch (error) {        
         console.error(error);
@@ -45,7 +45,7 @@
   
   <h1>All Users</h1>   
  
-  {#if users.length > 0}
+  {#if m_customer.length > 0}
     <table>
       <thead>        
         <tr>
@@ -64,19 +64,19 @@
       </thead>
       <tbody>
         
-        {#each users as user}
+        {#each m_customer as customer}
           <tr>
-            <td>{user.cust_id}</td>
-            <td>{user.first_name}</td>
-            <td>{user.last_name}</td>
-            <td>{user.company}</td>
-            <td>{user.street_no}</td>
-            <td>{user.street_name}</td>
-            <td>{user.suburb}</td>
-            <td>{user.state}</td>
-            <td>{user.post_code}</td>
-            <td>{user.phone}</td>
-            <td>{user.license_no}</td>
+            <td>{customer.cust_id}</td>
+            <td>{customer.first_name}</td>
+            <td>{customer.last_name}</td>
+            <td>{customer.company}</td>
+            <td>{customer.street_no}</td>
+            <td>{customer.street_name}</td>
+            <td>{customer.suburb}</td>
+            <td>{customer.state}</td>
+            <td>{customer.post_code}</td>
+            <td>{customer.phone}</td>
+            <td>{customer.license_no}</td>
           </tr>
         {/each}
       </tbody>
