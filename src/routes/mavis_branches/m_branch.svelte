@@ -1,6 +1,7 @@
 <script context="module">    
     import { createClient } from '@supabase/supabase-js';  
     
+
     const SUPABASE_URL = 'https://vhjdmjrluctpaljlzggc.supabase.co';
     const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZoamRtanJsdWN0cGFsamx6Z2djIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTcwODQ3MTExNCwiZXhwIjoyMDI0MDQ3MTE0fQ.qNv63B0HVFo3ah516mUwqzJzxOjzgksyb3gjOEEFALg';    
     const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
@@ -8,7 +9,9 @@
   
   <script lang="ts">    
     import { onMount } from 'svelte';  
-    
+    import { messages } from '../loading_messages.js';
+    import { typewriter } from '../transition.js';
+
     type Branch = {
       branch_code: String;
       manager: String;
@@ -98,6 +101,19 @@
         console.error(error);
       }
     });
+    let i = -1;
+
+    onMount(() => {
+      const interval = setInterval(() => {
+      i += 1;
+      i %= messages.length;
+      }, 2500);
+
+    return () => {
+      clearInterval(interval);
+    };
+    });
+
   </script>
   
   <h1>Branches</h1>  
@@ -137,6 +153,10 @@
       </tbody>
     </table>
   {:else}
-    <p>Fetching data...</p>
+  {#key i}
+	<p in:typewriter={{ speed: 10 }}>
+		{messages[i] || ''}
+	</p>
+{/key}
   {/if}
   
