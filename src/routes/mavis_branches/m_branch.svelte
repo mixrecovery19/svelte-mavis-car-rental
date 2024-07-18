@@ -3,7 +3,7 @@
     
 
     const SUPABASE_URL = 'https://vhjdmjrluctpaljlzggc.supabase.co';
-    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZoamRtanJsdWN0cGFsamx6Z2djIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTcwODQ3MTExNCwiZXhwIjoyMDI0MDQ3MTE0fQ.qNv63B0HVFo3ah516mUwqzJzxOjzgksyb3gjOEEFALg';    
+    const SUPABASE_ANON_KEY = '';    
     const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
   </script>
   
@@ -28,7 +28,7 @@
     export let m_branch: Branch[] = [];
     async function addNewBranch(m_branch: { branch_code: String; manager: String; branch_address: String; suburb: String; state: String; post_code: Number; phone: String; fax: String; branch_name: String; }[]) {
         const newBranch: Branch = {
-            branch_code: '', // Assign a default or unique code for the new branch
+            branch_code: '', 
             manager: '',
             branch_address: '',
             suburb: '',
